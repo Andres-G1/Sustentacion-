@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA Attendance</title>
+     <link rel="icon" href="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" type="image/png"> 
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="Login_container">
+<navbar>
+    <div class="nav-links">
+        <a href="/" style="color:rgb(0, 201, 90)">Inicio</a>
+        <a href="/module/password">Recuperar contraseña</a>
+    </div>
+    <div class="titulo">
+        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" width="40" height="40">
+    </div>
+</navbar>
+        <div>
+        <form class="formulario_login" method="POST" action="/users/login">
+            <select style="width: 250px;" class="input-login" name="typeid" id="typeid" required>
+                <option value="" disabled selected>Tipo de documento</option>
+                <option value="CC">Cédula de Ciudadanía (CC)</option>
+                <option value="TI">Tarjeta de Identidad (TI)</option>
+                <option value="CE">Cédula de Extranjería (CE)</option>
+                <option value="PEP">PEP</option>
+                <option value="PPT">Permiso por proteccion temporal(PPT)</option>
+            </select>
+            <input class="input-login" type="text" placeholder="Documento de identidad" required id="id" name="id">
+            <input class="input-login" type="password" placeholder="Contraseña" required id="password" name="password"><br>
+            <button type="submit">Login</button>
+        </form>
+        </div>
+    </div>
+</body>
+</html>
