@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template
 from routers.login import user_bp
-from routers.modules import module_bp
+from routers.aprendiz import aprendiz_bp
+from routers.coordinador import coordinador_bp
+from routers.instructor import instructor_bp
 from database import users
 
 app = Flask(__name__)
@@ -13,7 +15,11 @@ def home():
 
 app.register_blueprint(user_bp)
 
-app.register_blueprint(module_bp)
+app.register_blueprint(aprendiz_bp)
+
+app.register_blueprint(coordinador_bp)
+
+app.register_blueprint(instructor_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

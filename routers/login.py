@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
-from database import users
+from database import users, attendance
 
 user_bp = Blueprint('users', __name__, url_prefix="/users")
 
@@ -14,10 +14,14 @@ def login():
             session['user_id'] = id
             match users[id]["role"]:
                 case "Coordinador":
-                    return redirect(url_for("module.coordinador"))
+                    return redirect(url_for("coordinador.coordinador"))
                 case "Instructor":
-                    return redirect(url_for("module.instructor"))
+                    return redirect(url_for("instructor.instructor"))
                 case "Aprendiz":
-                    return redirect(url_for("module.aprendiz"))
+                    return redirect(url_for("aprendiz.aprendiz"))
             
-    return render_template("login.html", error="Invalid credentials") 
+    return render_template("login.html", error="Invalid credentials")
+
+@user_bp.route("/password")
+def password():
+    return render_template("Password.html") 

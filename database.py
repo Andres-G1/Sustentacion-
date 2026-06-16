@@ -22,7 +22,8 @@ users = {
               "name":"Alejandro",
               "lastname":"Matoma",
               "password": "1234",
-              "role":"Aprendiz"
+              "role":"Aprendiz",
+              "token":"3407184"
               },
     "1144" : {
               "email":"samuel@soy.sena.edu.co", 
@@ -30,7 +31,8 @@ users = {
               "name":"Samuel",
               "lastname":"Bernal",
               "password": "1234",
-              "role":"Aprendiz"
+              "role":"Aprendiz",
+              "token":"3407184"
               },
     "1145" : {
               "email":"andres@soy.sena.edu.co", 
@@ -38,7 +40,8 @@ users = {
               "name":"Andres",
               "lastname":"Gonzalez",
               "password": "1234",
-              "role":"Aprendiz"
+              "role":"Aprendiz",
+              "token":"3407185"
               },
     "1146" : {
               "email":"cristian@soy.sena.edu.co", 
@@ -46,10 +49,17 @@ users = {
               "name":"Cristian",
               "lastname":"Vesga",
               "password": "1234",
-              "role":"Aprendiz"
+              "role":"Aprendiz",
+              "token":"3407184"
               },
 }
 
 attendance = {
-    "state" : ["Asistencia","Falta","Excusa","Retardo"]
+    "state" : ["Asistencia","Falta","Excusa","Retardo"],
+    "competencies": ["Progracion Python","Bases de datos","Documentacion","Ingles","HTML / CSS"]
+}
+
+token = {
+    "token" : ["3407184","3407185", "3407186"],
+    "career" : ["ADSO", "VONL"],
 }

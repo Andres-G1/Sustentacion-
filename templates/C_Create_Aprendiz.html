@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA Attendance</title>
+    <link rel="icon" href="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" type="image/png"> 
+</head>
+<body>
+
+<div>
+    <form class="formulario_login" method="POST" action="/coordinador/coordinador_create_A">
+        
+        <select style="width: 250px;" class="input-login" name="typeid" id="typeid" required>
+            <option value="" disabled selected>Tipo de documento</option>
+            <option value="CC">Cédula de Ciudadanía (CC)</option>
+            <option value="TI">Tarjeta de Identidad (TI)</option>
+            <option value="CE">Cédula de Extranjería (CE)</option>
+            <option value="PEP">PEP</option>
+            <option value="PPT">Permiso por protección temporal (PPT)</option>
+        </select>
+
+        <input class="input-login" type="text" placeholder="Documento de identidad" required id="id" name="id">
+
+        <input class="input-login" type="text" placeholder="Nombres" required id="name" name="name">
+
+        <input class="input-login" type="text" placeholder="Apellidos" required id="lastname" name="lastname">
+
+        <input class="input-login" type="email" placeholder="Correo electrónico" required id="email" name="email"><br>
+
+        <button type="submit">Registrar Aprendiz</button>
+        <a href="/coordinador/coordinador">Back</a>
+    </form>
+</div>
+
+
+</body>
+</html>
