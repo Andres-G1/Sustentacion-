@@ -1,7 +1,75 @@
-{% extends 'module_A.html' %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} SENA Attendance {% endblock %} </title>
+    <link rel="icon" href="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" type="image/png"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordinador.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
 
-{% block title %}SENA Attendance{% endblock %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/coordinador.css') }}">
+<nav class="navbar navbar-expand-lg navbar-sena px-3 navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" width="34" height="34" alt="SENA">
+      <span class="fw-bold">SENA Attendance</span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navAprendiz">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navAprendiz">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li class="nav-item">
+          <a class="nav-link active px-3 py-2" href="#">Inicio</a>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active px-3 py-2" href="#" id="navUsuarios" data-bs-toggle="dropdown" aria-expanded="false">
+                Usuarios
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navUsuarios">
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_A">Crear Aprendiz</a></li>
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_I">Crear Instructor</a></li>
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_C">Crear Coordinador</a></li>
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle px-3 py-2" href="#" id="navAcademico" data-bs-toggle="dropdown" aria-expanded="false">
+                Académico
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navAcademico">
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_F">Crear Ficha</a></li>
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_Car">Crear Carrera</a></li>
+                <li><a class="dropdown-item" href="/coordinador/coordinador_create_Comp">Crear Competencia</a></li>
+            </ul>
+        </li>
+      </ul>
+
+      <div class="dropdown">
+          <div class="user-pill dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="text-end lh-sm">
+              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ users.name }}</div>
+              <span class="badge-aprendiz">{{ users.role }}</span>
+            </div>
+            <div class="avatar"> {{ users.name[0] }} </div>
+          </div>
+          
+          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+            <li><a class="dropdown-menu-item dropdown-item" href="#perfil">Mi Perfil</a></li>
+            <li><a class="dropdown-menu-item dropdown-item" href="#config">Configuración</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger fw-bold" href="/">Cerrar sesión</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+</nav>
 
 {% block content %}
 <div class="bg-light min-vh-100 py-5">
@@ -14,7 +82,7 @@
             </div>
         </div>
 
-        <h4 class="fw-bold text-dark mb-4 small text-uppercase tracking-wider text-muted">Gestión e Ingreso de Usuarios</h4>
+        <h4 class="fw-bold text-dark mb-4 small text-uppercase tracking-wider text-muted">Gestión de Usuarios</h4>
         
         <div class="row g-4 mb-5">
             
@@ -24,10 +92,14 @@
                         <div class="p-3 rounded-3 bg-success-subtle text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                         </div>
-                        <h5 class="fw-bold text-dark mb-0">Registro Individual (Manual)</h5>
+                        <h5 class="fw-bold text-dark mb-0">Gestion de Usuarios</h5>
                     </div>
-                    <p class="text-muted small mb-4">Registra aprendices o instructores uno a uno ingresando manualmente su información básica, documento de identidad y ficha correspondiente.</p>
-                    <a  href="/coordinador/coordinador_create_A" class="btn btn-outline-success rounded-3 mt-auto w-100 fw-semibold py-2">Abrir Formulario de Registro</a>
+                    <p class="text-muted small mb-4">Registro de aprendices, instructores y coordinadores del sistema.</p>
+                    <div class="d-flex flex-column gap-2 mt-auto">
+                        <a href="/coordinador/coordinador_create_A" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Gestionar Aprendices</a>
+                        <a href="/coordinador/coordinador_create_I" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Gestionar Instructores</a>
+                        <a href="/coordinador/coordinador_create_C" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Gestionar Administradores</a>
+                    </div>
                 </div>
             </div>
 
@@ -37,9 +109,9 @@
                         <div class="p-3 rounded-3 bg-primary-subtle text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                         </div>
-                        <h5 class="fw-bold text-dark mb-0">Importación Masiva (PDF / Excel)</h5>
+                        <h5 class="fw-bold text-dark mb-0">Gestion de usuarios (PDF / Excel)</h5>
                     </div>
-                    <p class="text-muted small mb-4">Carga listados oficiales de SofíaPlus en formato PDF o plantillas estructuradas para registrar grupos enteros de aprendices de manera masiva.</p>
+                    <p class="text-muted small mb-4">Carga de listados oficiales de SofíaPlus en formato PDF o Excel.</p>
                     
                     <a href="#registro-carga-archivo" class="btn btn-primary rounded-3 mt-auto w-100 fw-semibold py-2 shadow-sm">
                         Subir Documento / PDF
@@ -48,6 +120,46 @@
             </div>
 
         </div>
+
+        <h4 class="fw-bold text-dark mb-4 small text-uppercase tracking-wider text-muted">Gestión de fichas</h4>
+        
+        <div class="row g-4 mb-5">
+            
+            <div class="col-12 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-4 bg-white rounded-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="p-3 rounded-3 bg-success-subtle text-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-0">Gestion de Fichas</h5>
+                    </div>
+                    <p class="text-muted small mb-4">Registro de fichas, carreras y competencias del programa.</p>
+                    <div class="d-flex flex-column gap-2 mt-auto">
+                        <a href="/coordinador/coordinador_create_F" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Crear Ficha</a>
+                        <a href="/coordinador/coordinador_create_Car" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Crear Carrera</a>
+                        <a href="/coordinador/coordinador_create_Comp" class="btn btn-outline-success rounded-3 w-100 fw-semibold py-2">Crear Competencia</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100 border-0 shadow-sm p-4 bg-white rounded-4 border border-primary-subtle">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="p-3 rounded-3 bg-primary-subtle text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-0">Gestion de fichas (PDF / Excel)</h5>
+                    </div>
+                    <p class="text-muted small mb-4">Carga de listados oficiales de SofíaPlus en formato PDF o Excel.</p>
+                    
+                    <a href="#registro-carga-archivo" class="btn btn-primary rounded-3 mt-auto w-100 fw-semibold py-2 shadow-sm">
+                        Subir Documento / PDF
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
 
         <h4 class="fw-bold text-dark mb-4 small text-uppercase tracking-wider text-muted">Auditoría y Reportes de Coordinación</h4>
         
@@ -71,3 +183,33 @@
     </main>
 </div>
 {% endblock %}
+
+<style>
+    
+    /* Efecto de elevación suave moderno */
+    .card-hover-premium {
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent !important;
+    }
+    .card-hover-premium:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06) !important;
+        border-color: rgba(57, 169, 0, 0.2) !important; /* Destello verde SENA sutil */
+    }
+    
+    /* Corrección del fondo para que cubra bien */
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Mostrar la fecha de hoy automáticamente
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('es-ES', options);
+</script>
+
+</body>
+</html>
