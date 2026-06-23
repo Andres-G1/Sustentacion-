@@ -1,0 +1,28 @@
+{% extends "Aprendiz_config.html" %}
+
+{% block title %}Editar Aprendiz - SENA Attendance{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <div class="page-card card shadow-sm text-dark">
+        <div class="card-header bg-danger text-white py-3">
+            <h1 class="h5 mb-0">Eliminar Aprendiz</h1>
+            <small class="text-light">ID: {{ id }}</small>
+        </div>
+        <div class="card-body p-4">
+            <p class="lead">¿Estás seguro de que deseas eliminar este usuario?</p>
+            <div class="mb-4">
+                <strong>{{ usuario.name }} {{ usuario.lastname }}</strong><br>
+                <span class="text-muted">{{ usuario.email }} · Ficha {{ usuario.token }}</span>
+            </div>
+            <form method="POST" action="{{ url_for('coordinador.coordinador_delete_A', id=id) }}">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn btn-danger" type="submit">Eliminar definitivamente</button>
+                    <a class="btn btn-secondary" href="{{ url_for('coordinador.module_aprendiz_config') }}">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

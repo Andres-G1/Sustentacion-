@@ -1,0 +1,38 @@
+{% extends "Aprendiz_config.html" %}
+
+{% block title %}Editar Aprendiz - SENA Attendance{% endblock %}
+
+{% block content %}
+
+<main class="container my-4">
+            <div class="card p-4">
+                <h2 class="h5 mb-3">Lista de Coordinadores</h2>
+                
+                <ul class="list-group">
+                    {% for id_usuario, datos in users.items() %}
+                        {% if datos.role == "Coordinador" %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <strong>{{ datos.name }} {{ datos.lastname }}</strong> 
+                                    <span class="badge bg-info text-dark ms-2">Ficha: {{ datos.token }}</span>
+                                    <small class="text-muted d-block">ID: {{ id_usuario }} - {{ datos.email }}</small>
+                                </div>
+                                
+                                <div>
+                                    <a href="{{ url_for('coordinador.coordinador_alter_C', id=id_user) }}" class="btn btn-warning btn-sm me-2">
+                                        Editar
+                                    </a>
+                                    <a href="" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar al aprendiz {{ datos.name }}?');">
+                                        Eliminar
+                                    </a>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                
+                <a class="btn btn-primary mt-4" href="/coordinador/coordinador_create_C">Crear nuevo usuario</a>
+            </div>
+        </main>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "Aprendiz_config.html" %}
+
+{% block title %}Editar Aprendiz - SENA Attendance{% endblock %}
+
+{% block content %}
+<div class="page-card card shadow-sm">
+    <div class="card-header bg-warning text-dark py-3">
+        <h1 class="h5 mb-0">Modificar Datos del Instructor</h1>
+        <small class="text-muted">ID: {{ id }}</small>
+    </div>
+    <div class="card-body p-4">
+        <form action="{{ url_for('coordinador.coordinador_alter_I', id=id) }}" method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="typeid" class="form-label">Tipo de Documento</label>
+                    <select class="form-select" id="typeid" name="typeid" required>
+                        <option value="CC" {% if usuario.typeid == 'CC' %}selected{% endif %}>Cédula de Ciudadanía (CC)</option>
+                        <option value="TI" {% if usuario.typeid == 'TI' %}selected{% endif %}>Tarjeta de Identidad (TI)</option>
+                        <option value="PEP" {% if usuario.typeid == 'PEP' %}selected{% endif %}>PEP</option>
+                        <option value="PPT" {% if usuario.typeid == 'PPT' %}selected{% endif %}>PPT</option>
+                        <option value="CE" {% if usuario.typeid == 'CE' %}selected{% endif %}>Cédula de Extranjería (CE)</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ usuario.name }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastname" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" value="{{ usuario.lastname }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ usuario.email }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" value="{{ usuario.password }}" required>
+                </div>
+            </div>
+
+            <div class="form-actions mt-4">
+                <a href="{{ url_for('coordinador.module_instructor_config') }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
