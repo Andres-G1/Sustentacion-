@@ -3,7 +3,7 @@ from routers.login import user_bp
 from routers.aprendiz import aprendiz_bp
 from routers.coordinador import coordinador_bp
 from routers.instructor import instructor_bp
-from database import users 
+from database import users
 
 app = Flask(__name__)
 

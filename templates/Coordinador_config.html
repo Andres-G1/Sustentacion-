@@ -1,6 +1,6 @@
 {% extends "Aprendiz_config.html" %}
 
-{% block title %}Editar Aprendiz - SENA Attendance{% endblock %}
+{% block title %}SENA Attendance{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
                 <h2 class="h5 mb-3">Lista de Coordinadores</h2>
                 
                 <ul class="list-group">
-                    {% for id_usuario, datos in users.items() %}
+                    {% for id_user, datos in users.items() %}
                         {% if datos.role == "Coordinador" %}
                             <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                 <div>
@@ -22,7 +22,7 @@
                                     <a href="{{ url_for('coordinador.coordinador_alter_C', id=id_user) }}" class="btn btn-warning btn-sm me-2">
                                         Editar
                                     </a>
-                                    <a href="" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar al aprendiz {{ datos.name }}?');">
+                                    <a href="{{ url_for('coordinador.coordinador_delete_C', id=id_user) }}" class="btn btn-danger btn-sm">
                                         Eliminar
                                     </a>
                                 </div>
