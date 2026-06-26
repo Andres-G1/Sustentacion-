@@ -3,6 +3,7 @@ from routers.login import user_bp
 from routers.aprendiz import aprendiz_bp
 from routers.coordinador import coordinador_bp
 from routers.instructor import instructor_bp
+from routers.token import token_bp
 from database import users
 
 app = Flask(__name__)
@@ -20,6 +21,8 @@ app.register_blueprint(aprendiz_bp)
 app.register_blueprint(coordinador_bp)
 
 app.register_blueprint(instructor_bp)
+
+app.register_blueprint(token_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
