@@ -1,9 +1,9 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
 from database import token, career, attendance
 
-attendace_bp = Blueprint('token', __name__, url_prefix="/token")
+attendance_bp = Blueprint('attendance', __name__, url_prefix="/attendance")
 
-@attendace_bp.route("/create_token", methods=["GET", "POST"])
+@attendance_bp.route("/create_token", methods=["GET", "POST"])
 def create_token():
     if request.method == "POST":
         career = request.form.get("career")

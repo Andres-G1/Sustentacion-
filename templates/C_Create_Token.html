@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Token</title>
+</head>
+<body>
+
+    <h2>Crear Token</h2>
+
+    <form method="POST" action="{{ url_for('token.Create_token') }}">
+
+        <!-- Selector de carrera -->
+        <label for="career">Carrera:</label>
+        <select name="career" id="career" required>
+            <option value="" disabled selected>Selecciona una carrera</option>
+            {% for c in career_avaliable %}
+                <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Número de ficha -->
+        <label for="token">Número de ficha:</label>
+        <input 
+            type="text" 
+            name="token" 
+            id="token"
+            placeholder="Ej: 3407200" 
+            required
+        >
+
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit">Crear Token</button>
+
+    </form>
+
+</body>
+</html>

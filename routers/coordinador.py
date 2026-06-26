@@ -41,7 +41,6 @@ def coordinador_create_A():
     career_avaliable = career["career"]
     selected_career = request.args.get("career") or request.form.get("career")
     fichas_avaliable = token.get(selected_career, [])
-
     id_actual = session.get('user_id')
 
     if request.method == "POST" and id_actual in users:
@@ -101,7 +100,6 @@ def coordinador_alter_A(id):
         users[user_id]['name'] = request.form.get('name')
         users[user_id]['lastname'] = request.form.get('lastname')
         users[user_id]['password'] = request.form.get('password')
-        users[user_id]['token'] = request.form.get('token') 
         
         return redirect(url_for("coordinador.module_aprendiz_config"))
 
@@ -118,8 +116,8 @@ def coordinador_delete_A(id):
     id_actual = session.get('user_id')
 
     user_id = str(id)
-    if request.method == "POST" and id_actual in users :
-        if user_id in users and users[user_id].get("role") == "Aprendiz":
+    if request.method == "POST":
+        if user_id in users and users[user_id].get("role") == "Aprendiz" and id_actual in users :
             users.pop(user_id)
             return redirect(url_for("coordinador.module_aprendiz_config"))
         return render_template(
@@ -204,17 +202,18 @@ def coordinador_alter_I(id):
 
 @coordinador_bp.route("/coordinador_delete_I/<int:id>", methods=["GET", "POST"])
 def coordinador_delete_I(id):
-
     id_actual = session.get('user_id')
+    if id_actual not in users:
+        return redirect(url_for("home"))
 
     user_id = str(id)
-    if request.method == "POST" and id_actual in users:
+    if request.method == "POST":
         if user_id in users and users[user_id].get("role") == "Instructor":
             users.pop(user_id)
             return redirect(url_for("coordinador.module_instructor_config"))
         return render_template(
             "C_Delete_Instructor.html",
-            error="Instructor no encontrado.",
+            error="Aprendiz no encontrado.",
             id=id,
             usuario=None
         )
@@ -223,8 +222,7 @@ def coordinador_delete_I(id):
     return render_template(
         "C_Delete_Instructor.html",
         id=id,
-        usuario=usuario,
-        user = users[id_actual]
+        usuario=usuario
     )
 
 "============== COORDINADOR CREATE, DELETE, MODIFY =============="
@@ -294,12 +292,13 @@ def coordinador_alter_C(id):
 
 @coordinador_bp.route("/coordinador_delete_C/<int:id>", methods=["GET", "POST"])
 def coordinador_delete_C(id):
-
     id_actual = session.get('user_id')
+    if id_actual not in users:
+        return redirect(url_for("home"))
 
     user_id = str(id)
-    if request.method == "POST" and id_actual in users:
-        if user_id in users and users[user_id].get("role") == "Coordinador":
+    if request.method == "POST":
+        if user_id in users and users[user_id].get("role") == "Instructor":
             users.pop(user_id)
             return redirect(url_for("coordinador.module_coordinador_config"))
         return render_template(
@@ -313,14 +312,5 @@ def coordinador_delete_C(id):
     return render_template(
         "C_Delete_Coordinador.html",
         id=id,
-        usuario=usuario,
-        user = users[id_actual]
+        usuario=usuario
     )
-
-"=============================Gestionar Fichas=============================="
-
-@coordinador_bp.route("/Create_token", methods=["GET", "POST"])
-def Create_token():
-    id_actual = session.get('user_id') 
-
-    
