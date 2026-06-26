@@ -203,17 +203,15 @@ def coordinador_alter_I(id):
 @coordinador_bp.route("/coordinador_delete_I/<int:id>", methods=["GET", "POST"])
 def coordinador_delete_I(id):
     id_actual = session.get('user_id')
-    if id_actual not in users:
-        return redirect(url_for("home"))
 
     user_id = str(id)
     if request.method == "POST":
-        if user_id in users and users[user_id].get("role") == "Instructor":
+        if user_id in users and users[user_id].get("role") == "Instructor" and id_actual in users:
             users.pop(user_id)
             return redirect(url_for("coordinador.module_instructor_config"))
         return render_template(
             "C_Delete_Instructor.html",
-            error="Aprendiz no encontrado.",
+            error="Instructor no encontrado.",
             id=id,
             usuario=None
         )
@@ -222,7 +220,8 @@ def coordinador_delete_I(id):
     return render_template(
         "C_Delete_Instructor.html",
         id=id,
-        usuario=usuario
+        usuario=usuario,
+        user=users[id_actual]
     )
 
 "============== COORDINADOR CREATE, DELETE, MODIFY =============="
@@ -292,18 +291,17 @@ def coordinador_alter_C(id):
 
 @coordinador_bp.route("/coordinador_delete_C/<int:id>", methods=["GET", "POST"])
 def coordinador_delete_C(id):
+
     id_actual = session.get('user_id')
-    if id_actual not in users:
-        return redirect(url_for("home"))
 
     user_id = str(id)
     if request.method == "POST":
-        if user_id in users and users[user_id].get("role") == "Instructor":
+        if user_id in users and users[user_id].get("role") == "Coordinador" and id_actual in users:
             users.pop(user_id)
             return redirect(url_for("coordinador.module_coordinador_config"))
         return render_template(
             "C_Delete_Coordinador.html",
-            error="Aprendiz no encontrado.",
+            error="Coordinador no encontrado.",
             id=id,
             usuario=None
         )
@@ -312,5 +310,6 @@ def coordinador_delete_C(id):
     return render_template(
         "C_Delete_Coordinador.html",
         id=id,
-        usuario=usuario
+        usuario=usuario,
+        user = users[id_actual]
     )
