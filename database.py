@@ -56,7 +56,6 @@ users = {
 
 attendance = {
     "state" : ["Asistencia","Falta","Excusa","Retardo"],
-    "competencies": ["Progracion Python","Bases de datos","Documentacion","Ingles","HTML / CSS"]
 }
 
 token = {
