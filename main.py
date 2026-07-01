@@ -5,6 +5,7 @@ from routers.coordinador import coordinador_bp
 from routers.instructor import instructor_bp
 from routers.token import token_bp
 from routers.career import career_bp
+from routers.config_users import config_bp
 from database import users
 
 app = Flask(__name__)
@@ -26,6 +27,8 @@ app.register_blueprint(instructor_bp)
 app.register_blueprint(token_bp)
 
 app.register_blueprint(career_bp)
+
+app.register_blueprint(config_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
