@@ -68,3 +68,7 @@ token = {
 career = {
     "career": ["ADSO","VONL","GFI","GA"]
 }
+
+tokens_instructors = {}
+
+control_attendance = {}
