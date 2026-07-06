@@ -87,28 +87,39 @@ def coordinador_create_A():
 def coordinador_alter_A(id):
 
     id_actual = session.get('user_id')
-    
+
     user_id = str(id)
-    
+
     if user_id not in users or users[user_id].get("role") != "Aprendiz":
         return redirect(url_for("coordinador.module_aprendiz_config"))
 
-    if request.method == "POST" and id_actual in users :
+    if request.method == "POST" and id_actual in users:
 
         users[user_id]['typeid'] = request.form.get('typeid')
         users[user_id]['email'] = request.form.get('email')
         users[user_id]['name'] = request.form.get('name')
         users[user_id]['lastname'] = request.form.get('lastname')
         users[user_id]['password'] = request.form.get('password')
-        
+        users[user_id]['token'] = request.form.get('token')
+
         return redirect(url_for("coordinador.module_aprendiz_config"))
 
     usuario = users.get(user_id)
+
+    carrera_actual = None
+    for nombre_carrera, lista_tokens in token.items():
+        if usuario.get("token") in lista_tokens:
+            carrera_actual = nombre_carrera
+            break
+    fichas_disponibles = token.get(carrera_actual, [])
+
     return render_template(
         "C_Alter_Aprendiz.html",
         id=user_id,
         usuario=usuario,
-        user = users[id_actual]
+        user=users[id_actual],
+        carrera_actual=carrera_actual,
+        fichas_disponibles=fichas_disponibles
     )
 
 @coordinador_bp.route("/coordinador_delete_A/<int:id>", methods=["GET", "POST"])

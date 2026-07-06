@@ -72,3 +72,7 @@ career = {
 tokens_instructors = {}
 
 control_attendance = {}
+
+attendance_counter = {
+    "1145" : [2]
+}

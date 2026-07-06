@@ -1,4 +1,4 @@
-{% extends "Aprendiz_config.html" %}
+{% extends "module_A.html" %}
 
 {% block title %}SENA Attendance{% endblock %}
 
@@ -9,23 +9,23 @@
             <h2 class="page-title">Configuración de cuenta</h2>
             <p class="page-subtitle">Actualiza tus datos de acceso con seguridad y claridad.</p>
         </div>
-        <span class="status-badge">{{ user.role }}</span>
+        <span class="status-badge">{{ users.role }}</span>
     </div>
 
     {% if mensaje %}
         <div class="alert alert-{{ tipo_mensaje }}">{{ mensaje }}</div>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('config.module_config') }}" class="config-form">
+    <form method="POST" action="{{ url_for('config.module_config_aprendiz') }}" class="config-form">
         <div class="form-grid">
             <div class="form-group">
                 <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" value="{{ user.name }} {{ user.lastname }}" disabled>
+                <input type="text" id="nombre" value="{{ users.name }} {{ users.lastname }}" disabled>
             </div>
 
             <div class="form-group">
                 <label for="rol">Rol</label>
-                <input type="text" id="rol" value="{{ user.role }}" disabled>
+                <input type="text" id="rol" value="{{ users.role }}" disabled>
             </div>
 
             <div class="form-group full-width">
@@ -34,7 +34,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="{{ user.email }}"
+                    value="{{ users.email }}"
                     placeholder="Deja igual si no quieres cambiarlo">
             </div>
 
@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-actions">
-            <a href="/coordinador/coordinador" class="btn btn-outline-secondary">Cancelar</a>
+            <a href="/aprendiz/aprendiz" class="btn btn-outline-secondary">Cancelar</a>
             <button type="submit" class="btn btn-success">Guardar cambios</button>
         </div>
     </form>

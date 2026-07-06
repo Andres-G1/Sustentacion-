@@ -37,6 +37,21 @@
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" id="password" name="password" value="{{ usuario.password }}" required>
                 </div>
+
+                <div class="col-md-6">
+                    <label for="carrera" class="form-label">Carrera</label>
+                    <input type="text" class="form-control" id="carrera" value="{{ carrera_actual }}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label for="token" class="form-label">Ficha</label>
+                    <select class="form-select" id="token" name="token" required>
+                        {% for f in fichas_disponibles %}
+                            <option value="{{ f }}" {% if f == usuario.token %}selected{% endif %}>
+                                {{ f }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <div class="form-actions mt-4">

@@ -1,11 +1,11 @@
-{% extends "Aprendiz_config.html" %}
+{% extends "module_A.html" %}
 
 {% block title %}SENA Attendance{% endblock %}
 
 {% block content %}
 <div class="profile-card">
     <div class="profile-header">
-        <div class="profile-avatar">{{ user.name[0] }}{{ user.lastname[0] }}</div>
+        <div class="profile-avatar">{{ users.name[0] }}{{ users.lastname[0] }}</div>
         <div>
             <h2 class="page-title">Mi perfil</h2>
             <p class="page-subtitle">Aquí puedes revisar tus datos principales y tu información de acceso.</p>
@@ -15,20 +15,24 @@
     <div class="profile-grid">
         <div class="profile-item">
             <span class="profile-label">Nombre completo</span>
-            <span class="profile-value">{{ user.name }} {{ user.lastname }}</span>
+            <span class="profile-value">{{ users.name }} {{ users.lastname }}</span>
         </div>
         <div class="profile-item">
             <span class="profile-label">Tipo de documento</span>
-            <span class="profile-value">{{ user.typeid }}</span>
+            <span class="profile-value">{{ users.typeid }}</span>
         </div>
         <div class="profile-item">
             <span class="profile-label">Correo electrónico</span>
-            <span class="profile-value">{{ user.email }}</span>
+            <span class="profile-value">{{ users.email }}</span>
+        </div>
+        <div class="profile-item">
+            <span class="profile-label">Ficha o token</span>
+            <span class="profile-value">{{ users.token }}</span>
         </div>
     </div>
 
     <div class="form-actions">
-        <a href="{{ url_for('config.module_config') }}" class="btn btn-success">Actualizar datos</a>
+        <a href="{{ url_for('config.module_config_aprendiz') }}"  class="btn btn-success">Actualizar datos</a>
     </div>
 </div>
 {% endblock %}
