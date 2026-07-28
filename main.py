@@ -1,16 +1,19 @@
+import os
 from flask import Flask, request, render_template
 from routers.login import user_bp
 from routers.aprendiz import aprendiz_bp
-from routers.coordinador import coordinador_bp
 from routers.instructor import instructor_bp
-from routers.token import token_bp
-from routers.career import career_bp
-from routers.config_users import config_bp
-from database import users
+from database import db, get_database_uri
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
+app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.secret_key = '2122022025' 
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 def home():
@@ -20,15 +23,9 @@ app.register_blueprint(user_bp)
 
 app.register_blueprint(aprendiz_bp)
 
-app.register_blueprint(coordinador_bp)
-
 app.register_blueprint(instructor_bp)
-
-app.register_blueprint(token_bp)
-
-app.register_blueprint(career_bp)
-
-app.register_blueprint(config_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+#pip install python-dotenv pymysql flask-sqlalchemy

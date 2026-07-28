@@ -32,10 +32,10 @@
       <div class="dropdown">
           <div class="user-pill dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="text-end lh-sm">
-              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ users.name }}</div>
-              <span class="badge-aprendiz">{{ users.role }}</span>
+              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ user.Nom_Apr }}</div>
+              <span class="badge-aprendiz">Aprendiz</span>
             </div>
-            <div class="avatar"> {{ users.name[0] }} </div>
+            <div class="avatar"> {{ user.Nom_Apr[0] }} </div>
           </div>
           
           <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
@@ -56,7 +56,7 @@
         <div class="row align-items-center mb-5">
             <div class="col-12 col-md-8 text-center text-md-start">
                 <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">Panel de Consulta</span>
-                <h1 class="fw-bold text-dark display-6 mb-1">¡Buen día {{ users.role }}, {{ users.name.split()[0] }}!</h1>
+                <h1 class="fw-bold text-dark display-6 mb-1">¡Buen día Aprendiz, {{ user.Nom_Apr.split()[0] }}!</h1>
                 <p class="text-muted mb-0" id="currentDate">Cargando fecha...</p>
             </div>
         </div>
