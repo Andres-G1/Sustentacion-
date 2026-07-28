@@ -9,8 +9,8 @@ def instructor():
     role_actual = session.get('role')
 
     if id_actual and role_actual == 'Instructor':
-        aprendiz_data = Instructor.query.get(id_actual)
-        if aprendiz_data:
-            return render_template("module_I.html", user=aprendiz_data)
+        instructor_data = Instructor.query.get(id_actual)
+        if instructor_data:
+            return render_template("module_I.html", user=instructor_data)
 
     return redirect(url_for("home"))

@@ -1,13 +1,18 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
-from database import users, token, career
+from models.models import Administrador
 
 coordinador_bp = Blueprint('coordinador', __name__, url_prefix="/coordinador")
 
 @coordinador_bp.route("/coordinador")
 def coordinador():
-    id_actual = session.get('user_id') 
-    if id_actual in users: 
-        return render_template("module_C.html", users=users[id_actual]) 
+    id_actual = session.get('user_id')
+    role_actual = session.get('role')
+
+    if id_actual and role_actual == 'Instructor':
+        coordinador_data = Administrador.query.get(id_actual)
+        if coordinador_data:
+            return render_template("module_I.html", user=coordinador_data)
+
     return redirect(url_for("home"))
 
 "============== MODULES CONFIG ==============="
