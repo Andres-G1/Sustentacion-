@@ -125,3 +125,43 @@ CREATE TABLE Log (
     Fec_Log DATETIME DEFAULT CURRENT_TIMESTAMP,
     Det_Log TEXT NULL
 );
+
+ALTER TABLE Aprendiz MODIFY Id_Fic INT NULL;
+
+INSERT INTO Aprendiz (Nom_Apr, Ape_Apr, Tip_ide_Apr, Num_ide_Apr, Cor_Apr, Con_Apr)
+VALUES (
+    'Alejandro',
+    'Prueba',
+    'TI',
+    1234567890,
+    'alejandro.prueba@sena.edu.co',
+    'scrypt:32768:8:1$jmAas7Lm9lfDzTZ9$3080f58433b821b277f640fafa71585ecc2460e8323c224d311ec63e36a7d25fc1552f16aed9998017d9602173c7f4e1203e290f8445346044581ec55814b613'
+);
+
+INSERT INTO Administrador (Nom_Adm, Ape_Adm, Tip_ide_Adm, Num_ide_Adm, Cor_Adm, Con_Adm)
+VALUES (
+    'Samuel',
+    'Bravo',
+    'CC',
+    1234567891,
+    'samuel.bravo@sena.edu.co',
+    'scrypt:32768:8:1$cOtZGeAQAHkSqeyi$172e3027678cde86d1af9168592f74c581b096096c7dd403ab17c99b496142c1f0fc81a0437b691af00add46bf96f9fbca3fe0b8c69fee48ceffed72d24630a6'
+);
+
+INSERT INTO Carrera (Nom_Car, Des_Car)
+VALUES (
+    'ADSO',
+    'Analisis y Desarrollo de software'
+);
+
+INSERT INTO Fichas (Id_Car, Fec_inicio_Fic, Fec_Fin_Fic, Num_Fic, Jor_Fic)
+VALUES (
+	1,
+    '2026-06-29',
+    '2027-06-07',
+    3407184,
+    'Mañana'
+);
+
+select * from Administrador;
+select * from Aprendiz;
