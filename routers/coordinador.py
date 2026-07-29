@@ -1,5 +1,7 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
-from models.models import Administrador
+from models.models import Administrador, Aprendiz, Instructor, Fichas, Carrera
+from werkzeug.security import generate_password_hash
+from database import db
 
 coordinador_bp = Blueprint('coordinador', __name__, url_prefix="/coordinador")
 
@@ -8,10 +10,10 @@ def coordinador():
     id_actual = session.get('user_id')
     role_actual = session.get('role')
 
-    if id_actual and role_actual == 'Instructor':
+    if id_actual and role_actual == 'Coordinador':
         coordinador_data = Administrador.query.get(id_actual)
         if coordinador_data:
-            return render_template("module_I.html", user=coordinador_data)
+            return render_template("module_C.html", user=coordinador_data)
 
     return redirect(url_for("home"))
 
@@ -20,72 +22,103 @@ def coordinador():
 @coordinador_bp.route("/module_aprendiz_config")
 def module_aprendiz_config():
     id_actual = session.get('user_id')
-    if id_actual in users:
-        return render_template("Aprendiz_config.html", users=users, user=users[id_actual])
+    role_actual = session.get('role')
+
+    if id_actual and role_actual == 'Coordinador':
+        coordinador_data = Administrador.query.get(id_actual)
+        if coordinador_data:
+            lista_aprendiz = Aprendiz.query.all()
+            return render_template("Aprendiz_config.html", users=lista_aprendiz, user=coordinador_data)
+
     return redirect(url_for("home"))
 
 @coordinador_bp.route("/module_instructor_config")
 def module_instructor_config():
     id_actual = session.get('user_id')
-    if id_actual in users:
-        return render_template("Instructor_config.html", users=users, user=users[id_actual])
+    role_actual = session.get('role')
+
+    if id_actual and role_actual == 'Coordinador':
+        coordinador_data = Administrador.query.get(id_actual)
+        if coordinador_data:
+            listar_instructor = Instructor.query.all()
+            return render_template("Instrutor_config.html", users=listar_instructor, user=coordinador_data)
+
     return redirect(url_for("home"))
 
 @coordinador_bp.route("/module_coordinador_config")
 def module_coordinador_config():
     id_actual = session.get('user_id')
-    if id_actual in users:
-        return render_template("Coordinador_config.html", users=users, user=users[id_actual])
+    role_actual = session.get('role')
+
+    if id_actual and role_actual == 'Coordinador':
+        coordinador_data = Administrador.query.get(id_actual)
+        if coordinador_data:
+            listar_coordinador = Administrador.query.all()
+            return render_template("Coordinador_config.html", users=listar_coordinador, user=coordinador_data)
+
     return redirect(url_for("home"))
 
 "============== APREDIZ CREATE, DELETE, MODIFY =============="
 
 @coordinador_bp.route("/coordinador_create_A", methods=["GET", "POST"])
 def coordinador_create_A():
-       
-    career_avaliable = career["career"]
-    selected_career = request.args.get("career") or request.form.get("career")
-    fichas_avaliable = token.get(selected_career, [])
+    
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
+    
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+    
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
 
-    if request.method == "POST" and id_actual in users:
+    Avilable_career = Carrera.query.all()
+    Select_career = request.args.get("career") or request.form.get("career")
+    Tokens_avilable = Fichas.query.filter_by(Id_Car=Select_career).all() if Select_career else []
+
+    if request.method == "POST":
         typeid = request.form.get('typeid')
-        id = request.form.get('id')
+        num_id = request.form.get('id')
         email = request.form.get('email')
         name = request.form.get('name')
         lastname = request.form.get('lastname')
-        career_form = request.form.get('career')
-        token_form = request.form.get('token')
+        token_id = request.form.get('token')
         password = "1234"
-        role = "Aprendiz"
+        
+        aprendiz_existing = Aprendiz.query.filter(
+            (Aprendiz.Num_ide_Apr == num_id) | (Aprendiz.Cor_Apr == email)
+        ).first()
 
-        if id not in users:
-            users[id] = {
-                "typeid": typeid,
-                "email": email,
-                "name": name,
-                "lastname": lastname,
-                "career": career_form,
-                "token": token_form,
-                "password": password,
-                "role": role
-            }
+        if aprendiz_existing is None:
+            new_aprendiz = Aprendiz(
+                Nom_Apr=name,
+                Ape_Apr=lastname,
+                Tip_ide_Apr=typeid,
+                Num_ide_Apr=num_id,
+                Cor_Apr=email,
+                Con_Apr=generate_password_hash(password),
+                Id_Fic=token_id
+            )
+            db.session.add(new_aprendiz)
+            db.session.commit()
             return redirect(url_for("coordinador.module_aprendiz_config"))
         else:
             return render_template(
                 "C_Create_Aprendiz.html",
                 error="Credencial existente",
-                carreras=career_avaliable,
-                fichas=fichas_avaliable,
-                carrera_seleccionada=selected_career
+                career=Avilable_career,
+                token=Tokens_avilable,
+                careers_selected=Select_career,
+                user=coordinador_data
             )
 
     return render_template(
         "C_Create_Aprendiz.html",
-        carreras=career_avaliable,
-        fichas=fichas_avaliable,
-        carrera_seleccionada=selected_career,
-        user=users[id_actual]
+        career = Avilable_career,
+        token=Tokens_avilable,
+        careers_selected=Select_career,
+        user=coordinador_data
     )
 
 @coordinador_bp.route("/coordinador_alter_A/<id>", methods=["GET", "POST"])

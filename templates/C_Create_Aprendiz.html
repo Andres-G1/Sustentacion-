@@ -1,7 +1,7 @@
 {% extends "Aprendiz_config.html" %}
 
 {% block title %}SENA Attendance{% endblock %}
-
+    
 {% block content %}
 
 <main class="container my-5">
@@ -15,18 +15,18 @@
                 <div class="mb-3">
                     <label for="career" class="form-label">Selecciona una Carrera</label>
                     <select name="career" id="career" class="form-select" onchange="this.form.submit()" required>
-                        <option value="" {% if not carrera_seleccionada %}selected disabled{% endif %}>-- Selecciona una carrera --</option>
-                        {% for c in carreras %}
-                            <option value="{{ c }}" {% if c == carrera_seleccionada %}selected{% endif %}>{{ c }}</option>
-                        {% endfor %}
+                        <option value="" {% if not careers_selected %}selected disabled{% endif %}>-- Selecciona una carrera --</option>
+                            {% for c in career %}
+                        <option value="{{ c.Id_Car }}" {% if c.Id_Car|string == careers_selected %}selected{% endif %}>{{ c.Nom_Car }}</option>
+                            {% endfor %}
                     </select>
                 </div>
             </form>
 
             <!-- Paso 2: formulario completo cuando hay carrera elegida -->
-            {% if carrera_seleccionada %}
+            {% if careers_selected %}
                 <form method="POST">
-                    <input type="hidden" name="career" value="{{ carrera_seleccionada }}">
+                    <input type="hidden" name="career" value="{{ careers_selected }}">
 
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -59,9 +59,9 @@
                             <label for="token" class="form-label">Ficha</label>
                             <select name="token" id="token" class="form-select" required>
                                 <option value="" selected disabled>-- Selecciona una ficha --</option>
-                                {% for f in fichas %}
-                                    <option value="{{ f }}">{{ f }}</option>
-                                {% endfor %}
+                                    {% for f in token %}
+                                <option value="{{ f.Id_Fic }}">{{ f.Num_Fic }}</option>
+                                    {% endfor %}
                             </select>
                         </div>
                     </div>

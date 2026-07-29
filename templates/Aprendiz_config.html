@@ -54,10 +54,10 @@
       <div class="dropdown">
           <div class="user-pill dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="text-end lh-sm">
-              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ user.name }}</div>
-              <span class="badge-aprendiz">{{ user.role }}</span>
+              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ user.Nom_Adm }}</div>
+              <span class="badge-aprendiz"> Coordinador </span>
             </div>
-            <div class="avatar">{{ user.name[0] }}</div>
+            <div class="avatar">{{ user.Nom_Adm[0] }}</div>
           </div>
           
           <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
@@ -82,25 +82,25 @@
                 </div>
                 
                 <ul class="list-group">
-                    {% for id_user, datos in users.items() %}
-                        {% if datos.role == "Aprendiz" %}
+                    {% for aprendiz in users %}
                             <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                 <div>
-                                    <strong>{{ datos.name }} {{ datos.lastname }}</strong> 
-                                    <span class="badge bg-info text-dark ms-2">Ficha: {{ datos.token }}</span>
-                                    <small class="text-muted d-block">ID: {{ id_user }} - {{ datos.email }}</small>
+                                    <strong>{{ aprendiz.Nom_Apr }} {{ aprendiz.Ape_Apr }}</strong> 
+                                    <span class="badge bg-info text-dark ms-2">
+                                        Ficha: {{ aprendiz.ficha.Num_Fic if aprendiz.ficha else 'Sin asignar' }}
+                                    </span>
+                                    <small class="text-muted d-block">ID: {{ aprendiz.Id_Apr }} - {{ aprendiz.Cor_Apr }}</small>
                                 </div>
                                 
                                 <div>
-                                    <a href="{{ url_for('coordinador.coordinador_alter_A', id=id_user) }}" class="btn btn-warning btn-sm me-2">
+                                    <a href="{{ url_for('coordinador.coordinador_alter_A', id=aprendiz.Id_Apr) }}" class="btn btn-warning btn-sm me-2">
                                         Editar
                                     </a>
-                                    <a href="{{ url_for('coordinador.coordinador_delete_A', id=id_user) }}" class="btn btn-danger btn-sm";>
+                                    <a href="{{ url_for('coordinador.coordinador_delete_A', id=aprendiz.Id_Apr) }}" class="btn btn-danger btn-sm">
                                         Eliminar
                                     </a>
                                 </div>
                             </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
                 
