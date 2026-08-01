@@ -13,24 +13,22 @@
                 </div>
                 
                 <ul class="list-group">
-                    {% for id_user, datos in users.items() %}
-                        {% if datos.role == "Instructor" %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                                <div>
-                                    <strong>{{ datos.name }} {{ datos.lastname }}</strong> 
-                                    <small class="text-muted d-block">ID: {{ id_usuario }} - {{ datos.email }}</small>
-                                </div>
+                    {% for instructor in users %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <strong>{{ instructor.Nom_Ins }} {{ instructor.Ape_Ins }}</strong> 
+                                <small class="text-muted d-block">ID: {{ instructor.Id_Ins }} - {{ instructor.Cor_Ins }}</small>
+                            </div>
                                 
-                                <div>
-                                    <a href="{{ url_for('coordinador.coordinador_alter_I', id=id_user) }}" class="btn btn-warning btn-sm me-2">
-                                        Editar
-                                    </a>
-                                    <a href="{{ url_for('coordinador.coordinador_delete_I', id=id_user) }}" class="btn btn-danger btn-sm">
-                                        Eliminar
-                                    </a>
-                                </div>
-                            </li>
-                        {% endif %}
+                            <div>
+                                <a href="{{ url_for('coordinador.coordinador_alter_I', id=instructor.Id_Ins) }}" class="btn btn-warning btn-sm me-2">
+                                    Editar
+                                </a>
+                                <a href="{{ url_for('coordinador.coordinador_delete_I', id=instructor.Id_Ins) }}" class="btn btn-danger btn-sm">
+                                    Eliminar
+                                </a>
+                            </div>
+                        </li>
                     {% endfor %}
                 </ul>
             

@@ -1,6 +1,53 @@
-{% extends 'module_A.html' %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} SENA Attendance {% endblock %} </title>
+    <link rel="icon" href="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" type="image/png"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coordinador.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
 
-{% block title %}SENA Attendance{% endblock %}
+<nav class="navbar navbar-expand-lg navbar-sena px-3 navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" width="34" height="34" alt="SENA">
+      <span class="fw-bold">SENA Attendance</span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navAprendiz">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navAprendiz">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li class="nav-item">
+          <a class="nav-link active px-3 py-2" href="#">Inicio</a>
+        </li>
+
+
+      <div class="dropdown">
+          <div class="user-pill dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="text-end lh-sm">
+              <div style="font-weight:600; color:white; font-size:0.88rem;">{{ user.Nom_Ins }}</div>
+              <span class="badge-aprendiz"> Instructor </span>
+            </div>
+            <div class="avatar"> {{ user.Nom_Ins[0] }} </div>
+          </div>
+          
+          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+            <li><a class="dropdown-menu-item dropdown-item" href="/config/porfile_users">Mi Perfil</a></li>
+            <li><a class="dropdown-menu-item dropdown-item" href="/config/module_config">Configuración</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger fw-bold" href="/">Cerrar sesión</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+</nav>
 
 {% block content %}
 <div class="bg-light min-vh-100 py-5">
@@ -8,7 +55,7 @@
         
         <div class="row align-items-center mb-5">
             <div class="col-12 col-md-8 text-center text-md-start">
-                <h1 class="fw-bold text-dark display-6 mb-1">¡Bienvenido {{ users.role }}, {{ users.name.split()[0] }}!</h1>
+                <h1 class="fw-bold text-dark display-6 mb-1">¡Bienvenido Instructor, {{ user.Nom_Ins.split()[0] }}!</h1>
                 <p class="text-muted mb-0" id="currentDate">Cargando fecha...</p>
             </div>
         </div>
@@ -61,3 +108,33 @@
     </main>
 </div>
 {% endblock %}
+
+<style>
+    
+    /* Efecto de elevación suave moderno */
+    .card-hover-premium {
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent !important;
+    }
+    .card-hover-premium:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06) !important;
+        border-color: rgba(57, 169, 0, 0.2) !important; /* Destello verde SENA sutil */
+    }
+    
+    /* Corrección del fondo para que cubra bien */
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Mostrar la fecha de hoy automáticamente
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('es-ES', options);
+</script>
+
+</body>
+</html>

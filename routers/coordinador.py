@@ -40,8 +40,8 @@ def module_instructor_config():
     if id_actual and role_actual == 'Coordinador':
         coordinador_data = Administrador.query.get(id_actual)
         if coordinador_data:
-            listar_instructor = Instructor.query.all()
-            return render_template("Instrutor_config.html", users=listar_instructor, user=coordinador_data)
+            lista_instructor = Instructor.query.all()
+            return render_template("Instructor_config.html", users=lista_instructor, user=coordinador_data)
 
     return redirect(url_for("home"))
 
@@ -190,35 +190,51 @@ def coordinador_delete_A(id):
 def coordinador_create_I():
 
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
+    
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+    
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
 
-    if request.method == "POST" and id_actual in users:
+
+    if request.method == "POST":
         typeid = request.form.get('typeid')
-        id = request.form.get('id')
+        num_id = request.form.get('id')
         email = request.form.get('email')
         name = request.form.get('name')
         lastname = request.form.get('lastname')
         password = "1234"
-        role = "Instructor"
-
-        if id not in users:
-            users[id] = {
-                "typeid": typeid,
-                "email": email,
-                "name": name,
-                "lastname": lastname,
-                "password": password,
-                "role": role
-            }
+        
+        Instructor_existing = Instructor.query.filter(
+            (Instructor.Num_ide_Ins == num_id) | (Instructor.Cor_Ins == email)
+        ).first()
+        
+        if Instructor_existing is None:
+            new_aprendiz = Instructor(
+                Nom_Ins=name,
+                Ape_Ins=lastname,
+                Tip_ide_Ins=typeid,
+                Num_ide_Ins=num_id,
+                Cor_Ins=email,
+                Con_Ins=generate_password_hash(password),
+                )
+            db.session.add(new_aprendiz)
+            db.session.commit()
             return redirect(url_for("coordinador.module_instructor_config"))
+                
         else:
             return render_template(
                 "C_Create_Instructor.html",
                 error="Credencial existente",
+                user=coordinador_data
             )
 
     return render_template(
         "C_Create_Instructor.html",
-        user=users[id_actual]
+        user=coordinador_data
     )
 
 @coordinador_bp.route("/coordinador_alter_I/<id>", methods=["GET", "POST"])
