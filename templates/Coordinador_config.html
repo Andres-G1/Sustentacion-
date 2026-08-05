@@ -14,24 +14,22 @@
                 </div>
                 
                 <ul class="list-group">
-                    {% for id_user, datos in users.items() %}
-                        {% if datos.role == "Coordinador" %}
+                    {% for coordinador in users %}
                             <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                 <div>
-                                    <strong>{{ datos.name }} {{ datos.lastname }}</strong> 
-                                    <small class="text-muted d-block">ID: {{ id_usuario }} - {{ datos.email }}</small>
+                                    <strong>{{ coordinador.Nom_Adm }} {{ coordinador.Ape_Adm }}</strong> 
+                                    <small class="text-muted d-block">ID: {{ coordinador.Id_Adm }} - {{ coordinador.Cor_Adm }}</small>
                                 </div>
                                 
                                 <div>
-                                    <a href="{{ url_for('coordinador.coordinador_alter_C', id=id_user) }}" class="btn btn-warning btn-sm me-2">
+                                    <a href="{{ url_for('coordinador.coordinador_alter_C', id=coordinador.Id_Adm) }}" class="btn btn-warning btn-sm me-2">
                                         Editar
                                     </a>
-                                    <a href="{{ url_for('coordinador.coordinador_delete_C', id=id_user) }}" class="btn btn-danger btn-sm">
+                                    <a href="{{ url_for('coordinador.coordinador_delete_C', id=coordinador.Id_Adm) }}" class="btn btn-danger btn-sm">
                                         Eliminar
                                     </a>
                                 </div>
                             </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
                 

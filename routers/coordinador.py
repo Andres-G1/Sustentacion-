@@ -121,67 +121,93 @@ def coordinador_create_A():
         user=coordinador_data
     )
 
-@coordinador_bp.route("/coordinador_alter_A/<id>", methods=["GET", "POST"])
-def coordinador_alter_A(id):
+@coordinador_bp.route("/coordinador_alter_A/<Id_Apr>", methods=["GET", "POST"])
+def coordinador_alter_A(Id_Apr):
 
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
+    
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+    
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+    
+    users = Aprendiz.query.get(Id_Apr)
+    if not users:
+        return "Aprendiz no encontrado", 404
+    
+    if request.method == "POST":
 
-    user_id = str(id)
+        users.Tip_ide_Apr = request.form.get('typeid')
+        users.Cor_Apr = request.form.get('email')
+        users.Nom_Apr = request.form.get('name')
+        users.Ape_Apr = request.form.get('lastname')
+        users.Con_Apr = request.form.get('password')
+        users.Id_Fic = request.form.get('token')
+        
+        db.session.commit()
 
-    if user_id not in users or users[user_id].get("role") != "Aprendiz":
         return redirect(url_for("coordinador.module_aprendiz_config"))
 
-    if request.method == "POST" and id_actual in users:
+    Current_Career = "No asignada"
+    Avilable_Tokens = []
+    
+    token_user = Fichas.query.filter_by(Id_Fic=users.Id_Fic).first()
 
-        users[user_id]['typeid'] = request.form.get('typeid')
-        users[user_id]['email'] = request.form.get('email')
-        users[user_id]['name'] = request.form.get('name')
-        users[user_id]['lastname'] = request.form.get('lastname')
-        users[user_id]['password'] = request.form.get('password')
-        users[user_id]['token'] = request.form.get('token')
+    if token_user:
 
-        return redirect(url_for("coordinador.module_aprendiz_config"))
-
-    usuario = users.get(user_id)
-
-    carrera_actual = None
-    for nombre_carrera, lista_tokens in token.items():
-        if usuario.get("token") in lista_tokens:
-            carrera_actual = nombre_carrera
-            break
-    fichas_disponibles = token.get(carrera_actual, [])
+        carrera_obj = Carrera.query.get(token_user.Id_Car) 
+        if carrera_obj:
+            Current_Career = carrera_obj.Nom_Car
+        
+        Tokens_db = Fichas.query.filter_by(Id_Car=token_user.Id_Car).all()
+        Avilable_Tokens = [f.Num_Fic for f in Tokens_db]
 
     return render_template(
-        "C_Alter_Aprendiz.html",
-        id=user_id,
-        usuario=usuario,
-        user=users[id_actual],
-        carrera_actual=carrera_actual,
-        fichas_disponibles=fichas_disponibles
+        'C_Alter_Aprendiz.html', 
+        id=id_actual, 
+        usuario=users, 
+        user=coordinador_data, 
+        carrera_actual=Current_Career, 
+        Avilable_Tokens=Avilable_Tokens
     )
 
-@coordinador_bp.route("/coordinador_delete_A/<int:id>", methods=["GET", "POST"])
-def coordinador_delete_A(id):
-    id_actual = session.get('user_id')
 
-    user_id = str(id)
+@coordinador_bp.route("/coordinador_delete_A/<int:Id_Apr>", methods=["GET", "POST"])
+def coordinador_delete_A(Id_Apr):
+    id_actual = session.get('user_id')
+    role_actual = session.get('role')
+        
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+        
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+        
+    users = Aprendiz.query.get(Id_Apr)
+    if not users:
+        return "Aprendiz no encontrado", 404
+
     if request.method == "POST":
-        if user_id in users and users[user_id].get("role") == "Aprendiz" and id_actual in users :
-            users.pop(user_id)
+        if Id_Apr in users:
+            users.pop(Id_Apr)
             return redirect(url_for("coordinador.module_aprendiz_config"))
         return render_template(
             "C_Delete_Aprendiz.html",
             error="Aprendiz no encontrado.",
-            id=id,
+            id=Id_Apr,
             usuario=None
         )
 
-    usuario = users.get(user_id)
+    users = users.get(Id_Apr)
     return render_template(
         "C_Delete_Aprendiz.html",
         id=id,
-        usuario=usuario,
-        user = users[id_actual]
+        usuario=users,
+        user = coordinador_data
     )
 
 "============== INSTRUCTOR CREATE, DELETE, MODIFY =============="
@@ -314,7 +340,7 @@ def coordinador_create_C():
 
 
         Administrador_existing = Administrador.query.filter(
-            (Administrador.Num_ide_Adm == num_id) | (Administrador.Cor_adm == email)
+            (Administrador.Num_ide_Adm == num_id) | (Administrador.Cor_Adm == email)
         ).first()
         
         if Administrador_existing is None:

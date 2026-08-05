@@ -6,10 +6,11 @@
 <div class="page-card card shadow-sm">
     <div class="card-header bg-warning text-dark py-3">
         <h1 class="h5 mb-0">Modificar Datos del Aprendiz</h1>
-        <small class="text-muted">ID: {{ id }}</small>
+        <small class="text-muted">ID: {{ usuario.Id_Apr }}</small>
     </div>
     <div class="card-body p-4">
-        <form action="{{ url_for('coordinador.coordinador_alter_A', id=id) }}" method="POST">
+
+        <form action="{{ url_for('coordinador.coordinador_alter_A', Id_Apr=usuario.Id_Apr) }}" method="POST">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="typeid" class="form-label">Tipo de Documento</label>
@@ -45,7 +46,7 @@
                 <div class="col-md-6">
                     <label for="token" class="form-label">Ficha</label>
                     <select class="form-select" id="token" name="token" required>
-                        {% for f in fichas_disponibles %}
+                        {% for f in Avilable_Tokens %}
                             <option value="{{ f }}" {% if f == usuario.token %}selected{% endif %}>
                                 {{ f }}
                             </option>
