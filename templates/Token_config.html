@@ -14,25 +14,26 @@
         </div>
         
         {% if token %}
-            {% for carrera, fichas in token.items() %}
+            {% for carrera in token %}
                 <div class="card mb-3">
                     <div class="card-header bg-light">
-                        <h5 class="mb-0">{{ carrera }}</h5>
+                        <h5 class="mb-0">{{ carrera.Nom_Car }}</h5>
                     </div>
                     <div class="card-body">
-                        {% if fichas %}
+                        {% if carrera.fichas %}
                             <ul class="list-group">
-                                {% for ficha in fichas %}
+                                {% for ficha in carrera.fichas %}
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                                         <div>
-                                            <strong>{{ ficha }}</strong>
+                                            <strong>Ficha: {{ ficha.Num_Fic }}</strong>
+                                            <span class="badge bg-secondary ms-2">{{ ficha.Jor_Fic }}</span>
                                         </div>
                                         
                                         <div>
-                                            <a href="{{ url_for('token.Alter_token', career=carrera, old_token=ficha) }}" class="btn btn-warning btn-sm me-2">
+                                            <a href="{{ url_for('token.Alter_token', career=carrera.Id_Car, old_token=ficha.Num_Fic) }}" class="btn btn-warning btn-sm me-2">
                                                 Editar
                                             </a>
-                                            <a href="{{ url_for('token.Delete_token', career=carrera, token_value=ficha) }}" class="btn btn-danger btn-sm">
+                                            <a href="{{ url_for('token.Delete_token', career=carrera.Id_Car, token_value=ficha.Num_Fic) }}" class="btn btn-danger btn-sm">
                                                 Eliminar
                                             </a>
                                         </div>

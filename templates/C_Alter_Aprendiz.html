@@ -10,42 +10,64 @@
     </div>
     <div class="card-body p-4">
 
-        <form action="{{ url_for('coordinador.coordinador_alter_A', Id_Apr=usuario.Id_Apr) }}" method="POST">
+        <form action="{{ url_for('coordinador.coordinador_alter_A', Id_Apr=usuario.Id_Apr) }}" method="POST" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="typeid" class="form-label">Tipo de Documento</label>
-                    <select class="form-select" id="typeid" name="typeid" required>
-                        <option value="CC" {% if usuario.typeid == 'CC' %}selected{% endif %}>Cédula de Ciudadanía (CC)</option>
-                        <option value="TI" {% if usuario.typeid == 'TI' %}selected{% endif %}>Tarjeta de Identidad (TI)</option>
-                        <option value="PEP" {% if usuario.typeid == 'PEP' %}selected{% endif %}>PEP</option>
-                        <option value="PPT" {% if usuario.typeid == 'PPT' %}selected{% endif %}>PPT</option>
-                        <option value="CE" {% if usuario.typeid == 'CE' %}selected{% endif %}>Cédula de Extranjería (CE)</option>
+                    <select class="form-select {% if errors.typeid %}is-invalid{% endif %}" id="typeid" name="typeid">
+                        <option value="CC" {% if usuario.Tip_ide_Apr == 'CC' %}selected{% endif %}>Cédula de Ciudadanía (CC)</option>
+                        <option value="TI" {% if usuario.Tip_ide_Apr == 'TI' %}selected{% endif %}>Tarjeta de Identidad (TI)</option>
+                        <option value="PEP" {% if usuario.Tip_ide_Apr == 'PEP' %}selected{% endif %}>PEP</option>
+                        <option value="PPT" {% if usuario.Tip_ide_Apr == 'PPT' %}selected{% endif %}>PPT</option>
+                        <option value="CE" {% if usuario.Tip_ide_Apr == 'CE' %}selected{% endif %}>Cédula de Extranjería (CE)</option>
                     </select>
+                    {% if errors.typeid %}
+                        <div class="invalid-feedback">{{ errors.typeid }}</div>
+                    {% endif %}
                 </div>
+
                 <div class="col-md-6">
                     <label for="name" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ usuario.name }}" required>
+                    <input type="text" class="form-control {% if errors.name %}is-invalid{% endif %}"
+                           id="name" name="name" value="{{ usuario.Nom_Apr }}">
+                    {% if errors.name %}
+                        <div class="invalid-feedback">{{ errors.name }}</div>
+                    {% endif %}
                 </div>
+
                 <div class="col-md-6">
                     <label for="lastname" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" value="{{ usuario.lastname }}" required>
+                    <input type="text" class="form-control {% if errors.lastname %}is-invalid{% endif %}"
+                           id="lastname" name="lastname" value="{{ usuario.Ape_Apr }}">
+                    {% if errors.lastname %}
+                        <div class="invalid-feedback">{{ errors.lastname }}</div>
+                    {% endif %}
                 </div>
+
                 <div class="col-md-6">
                     <label for="email" class="form-label">Correo Electrónico</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ usuario.email }}" required>
+                    <input type="email" class="form-control {% if errors.email %}is-invalid{% endif %}"
+                           id="email" name="email" value="{{ usuario.Cor_Apr }}">
+                    {% if errors.email %}
+                        <div class="invalid-feedback">{{ errors.email }}</div>
+                    {% endif %}
                 </div>
+
                 <div class="col-md-6">
                     <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" value="{{ usuario.password }}" required>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Dejar en blanco para no modificar">
+                    <small class="text-muted">Solo llena este campo si deseas cambiar la contraseña.</small>
                 </div>
 
                 <div class="col-md-6">
                     <label for="carrera" class="form-label">Carrera</label>
                     <input type="text" class="form-control" id="carrera" value="{{ carrera_actual }}" disabled>
                 </div>
+
                 <div class="col-md-6">
                     <label for="token" class="form-label">Ficha</label>
-                    <select class="form-select" id="token" name="token" required>
+                    <select class="form-select" id="token" name="token">
                         {% for f in Avilable_Tokens %}
                             <option value="{{ f }}" {% if f == usuario.token %}selected{% endif %}>
                                 {{ f }}

@@ -123,7 +123,6 @@ def coordinador_create_A():
 
 @coordinador_bp.route("/coordinador_alter_A/<Id_Apr>", methods=["GET", "POST"])
 def coordinador_alter_A(Id_Apr):
-
     id_actual = session.get('user_id')
     role_actual = session.get('role')
     
@@ -138,45 +137,62 @@ def coordinador_alter_A(Id_Apr):
     if not users:
         return "Aprendiz no encontrado", 404
     
+    errors = {}
+    
     if request.method == "POST":
-
-        users.Tip_ide_Apr = request.form.get('typeid')
-        users.Cor_Apr = request.form.get('email')
-        users.Nom_Apr = request.form.get('name')
-        users.Ape_Apr = request.form.get('lastname')
-        users.Con_Apr = request.form.get('password')
-        users.Id_Fic = request.form.get('token')
+        typeid = request.form.get('typeid', '').strip()
+        email = request.form.get('email', '').strip()
+        name = request.form.get('name', '').strip()
+        lastname = request.form.get('lastname', '').strip()
+        password = request.form.get('password', '').strip()
         
-        db.session.commit()
-
-        return redirect(url_for("coordinador.module_aprendiz_config"))
-
+        if not typeid:
+            errors['typeid'] = "El tipo de identificación es obligatorio."
+        if not email:
+            errors['email'] = "El correo es obligatorio."
+        if not name:
+            errors['name'] = "El nombre es obligatorio."
+        if not lastname:
+            errors['lastname'] = "El apellido es obligatorio."
+        
+        if not errors:
+            users.Tip_ide_Apr = typeid
+            users.Cor_Apr = email
+            users.Nom_Apr = name
+            users.Ape_Apr = lastname
+            
+            if password:
+                users.Con_Apr = generate_password_hash(password)
+            
+            db.session.commit()
+            return redirect(url_for("coordinador.module_aprendiz_config"))
+    
     Current_Career = "No asignada"
     Avilable_Tokens = []
     
     token_user = Fichas.query.filter_by(Id_Fic=users.Id_Fic).first()
-
     if token_user:
-
-        carrera_obj = Carrera.query.get(token_user.Id_Car) 
+        carrera_obj = Carrera.query.get(token_user.Id_Car)
         if carrera_obj:
             Current_Career = carrera_obj.Nom_Car
         
         Tokens_db = Fichas.query.filter_by(Id_Car=token_user.Id_Car).all()
         Avilable_Tokens = [f.Num_Fic for f in Tokens_db]
-
+    
     return render_template(
-        'C_Alter_Aprendiz.html', 
-        id=id_actual, 
-        usuario=users, 
-        user=coordinador_data, 
-        carrera_actual=Current_Career, 
-        Avilable_Tokens=Avilable_Tokens
+        'C_Alter_Aprendiz.html',
+        id=id_actual,
+        usuario=users,
+        user=coordinador_data,
+        carrera_actual=Current_Career,
+        Avilable_Tokens=Avilable_Tokens,
+        errors=errors
     )
 
 
 @coordinador_bp.route("/coordinador_delete_A/<int:Id_Apr>", methods=["GET", "POST"])
 def coordinador_delete_A(Id_Apr):
+
     id_actual = session.get('user_id')
     role_actual = session.get('role')
         
@@ -187,28 +203,22 @@ def coordinador_delete_A(Id_Apr):
     if not coordinador_data:
         return redirect(url_for("home"))
         
-    users = Aprendiz.query.get(Id_Apr)
-    if not users:
+    aprendiz = Aprendiz.query.get(Id_Apr)
+    if not aprendiz:
         return "Aprendiz no encontrado", 404
 
     if request.method == "POST":
-        if Id_Apr in users:
-            users.pop(Id_Apr)
+            db.session.delete(aprendiz)  
+            db.session.commit() 
             return redirect(url_for("coordinador.module_aprendiz_config"))
-        return render_template(
-            "C_Delete_Aprendiz.html",
-            error="Aprendiz no encontrado.",
-            id=Id_Apr,
-            usuario=None
-        )
 
-    users = users.get(Id_Apr)
     return render_template(
         "C_Delete_Aprendiz.html",
-        id=id,
-        usuario=users,
-        user = coordinador_data
+        id=Id_Apr,
+        usuario=aprendiz,    
+        user=coordinador_data     
     )
+
 
 "============== INSTRUCTOR CREATE, DELETE, MODIFY =============="
 
@@ -263,56 +273,71 @@ def coordinador_create_I():
         user=coordinador_data
     )
 
-@coordinador_bp.route("/coordinador_alter_I/<id>", methods=["GET", "POST"])
-def coordinador_alter_I(id):
+@coordinador_bp.route("/coordinador_alter_I/<Id_Ins>", methods=["GET", "POST"])
+def coordinador_alter_I(Id_Ins):
 
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
     
-    user_id = str(id)
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
     
-    if user_id not in users or users[user_id].get("role") != "Instructor":
-        return redirect(url_for("coordinador.module_instructor_config"))
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+    
+    users = Instructor.query.get(Id_Ins)
+    if not users:
+        return "Instructor no encontrado", 404
 
-    if request.method == "POST" and id_actual in users :
+    if request.method == "POST":
 
-        users[user_id]['typeid'] = request.form.get('typeid')
-        users[user_id]['email'] = request.form.get('email')
-        users[user_id]['name'] = request.form.get('name')
-        users[user_id]['lastname'] = request.form.get('lastname')
-        users[user_id]['password'] = request.form.get('password')
+        users.Tip_ide_Ins = request.form.get('typeid')
+        users.Cor_Ins = request.form.get('email')
+        users.Nom_Ins = request.form.get('name')
+        users.Ape_Ins = request.form.get('lastname')
+        password = request.form.get('password')
+        if password and password.strip():
+            users.Con_Ins = generate_password_hash(password)
         
+        db.session.commit()
+
         return redirect(url_for("coordinador.module_instructor_config"))
 
-    usuario = users.get(user_id)
     return render_template(
-        "C_Alter_Instructor.html",
-        id=user_id,
-        usuario=usuario,
-        user = users[id_actual]
+        'C_Alter_Instructor.html', 
+        id=id_actual, 
+        usuario=users, 
+        user=coordinador_data, 
     )
 
-@coordinador_bp.route("/coordinador_delete_I/<int:id>", methods=["GET", "POST"])
-def coordinador_delete_I(id):
+@coordinador_bp.route("/coordinador_delete_I/<int:Id_Ins>", methods=["GET", "POST"])
+def coordinador_delete_I(Id_Ins):
+    
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
+        
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+        
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+        
+    instructor = Instructor.query.get(Id_Ins)
+    if not instructor:
+        return "Instructor no encontrado", 404
 
-    user_id = str(id)
     if request.method == "POST":
-        if user_id in users and users[user_id].get("role") == "Instructor" and id_actual in users:
-            users.pop(user_id)
+            db.session.delete(instructor)  
+            db.session.commit() 
             return redirect(url_for("coordinador.module_instructor_config"))
-        return render_template(
-            "C_Delete_Instructor.html",
-            error="Instructor no encontrado.",
-            id=id,
-            usuario=None
-        )
 
-    usuario = users.get(user_id)
     return render_template(
         "C_Delete_Instructor.html",
-        id=id,
-        usuario=usuario,
-        user=users[id_actual]
+        id=Id_Ins,
+        usuario=instructor,    
+        user=coordinador_data     
     )
 
 "============== COORDINADOR CREATE, DELETE, MODIFY =============="
@@ -368,55 +393,70 @@ def coordinador_create_C():
         user=coordinador_data
     )
 
-@coordinador_bp.route("/coordinador_alter_C/<id>", methods=["GET", "POST"])
-def coordinador_alter_C(id):
+@coordinador_bp.route("/coordinador_alter_C/<Id_Adm>", methods=["GET", "POST"])
+def coordinador_alter_C(Id_Adm):
 
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
     
-    user_id = str(id)
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
     
-    if user_id not in users or users[user_id].get("role") != "Coordinador":
-        return redirect(url_for("coordinador.module_coordinador_config"))
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+    
+    users = Administrador.query.get(Id_Adm)
+    if not users:
+        return "Coordinador no encontrado", 404
 
-    if request.method == "POST" and id_actual in users :
+    if request.method == "POST":
 
-        users[user_id]['typeid'] = request.form.get('typeid')
-        users[user_id]['email'] = request.form.get('email')
-        users[user_id]['name'] = request.form.get('name')
-        users[user_id]['lastname'] = request.form.get('lastname')
-        users[user_id]['password'] = request.form.get('password')
+        users.Tip_ide_Adm = request.form.get('typeid')
+        users.Cor_Adm = request.form.get('email')
+        users.Nom_Adm = request.form.get('name')
+        users.Ape_Adm = request.form.get('lastname')
         
+        password = request.form.get('password')
+        if password and password.strip():
+            users.Con_Adm = generate_password_hash(password)
+        
+        db.session.commit()
+
         return redirect(url_for("coordinador.module_coordinador_config"))
 
-    usuario = users.get(user_id)
     return render_template(
-        "C_Alter_Coordinador.html",
-        id=user_id,
-        usuario=usuario,
-        user = users[id_actual]
+        'C_Alter_Coordinador.html', 
+        id=id_actual, 
+        usuario=users, 
+        user=coordinador_data, 
     )
 
-@coordinador_bp.route("/coordinador_delete_C/<int:id>", methods=["GET", "POST"])
-def coordinador_delete_C(id):
+@coordinador_bp.route("/coordinador_delete_C/<int:Id_Adm>", methods=["GET", "POST"])
+def coordinador_delete_C(Id_Adm):
 
     id_actual = session.get('user_id')
+    role_actual = session.get('role')
+        
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+        
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+        
+    administrador = Administrador.query.get(Id_Adm)
+    if not administrador:
+        return "Instructor no encontrado", 404
 
-    user_id = str(id)
     if request.method == "POST":
-        if user_id in users and users[user_id].get("role") == "Coordinador" and id_actual in users:
-            users.pop(user_id)
+            db.session.delete(administrador)  
+            db.session.commit() 
             return redirect(url_for("coordinador.module_coordinador_config"))
-        return render_template(
-            "C_Delete_Coordinador.html",
-            error="Coordinador no encontrado.",
-            id=id,
-            usuario=None
-        )
 
-    usuario = users.get(user_id)
     return render_template(
         "C_Delete_Coordinador.html",
-        id=id,
-        usuario=usuario,
-        user = users[id_actual]
+        id=Id_Adm,
+        usuario=administrador,    
+        user=coordinador_data     
     )

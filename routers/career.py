@@ -1,14 +1,28 @@
 from flask import Blueprint, request, render_template, url_for, redirect, session
-from database import career, users, token
+from models.models import Carrera, Administrador
+from database import db
 
 career_bp = Blueprint('career', __name__, url_prefix="/career")
 
 @career_bp.route("/module_career_config")
 def module_career_config():
     id_actual = session.get('user_id')
-    if id_actual in users:
-        return render_template("Career_config.html", career=career, user=users[id_actual])
-    return redirect(url_for("home"))
+    role_actual = session.get('role')
+
+    if not id_actual or role_actual != 'Coordinador':
+        return redirect(url_for("home"))
+
+    coordinador_data = Administrador.query.get(id_actual)
+    if not coordinador_data:
+        return redirect(url_for("home"))
+
+    career_list = Carrera.query.all()
+
+    return render_template(
+        "Token_config.html", 
+        user=coordinador_data, 
+        career=career_list
+    )
 
 @career_bp.route("/Create_career", methods=["GET", "POST"])
 def Create_career():

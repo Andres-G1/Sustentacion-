@@ -7,16 +7,17 @@
 <main class="container my-5">
     <div class="page-card card shadow-sm" style="max-width: 600px; margin: 0 auto;">
         <div class="card-header bg-success text-white py-3">
-            <h1 class="h5 mb-0">Crear Nuevo Token</h1>
+            <h1 class="h5 mb-0">Crear Nueva Ficha</h1>
         </div>
         <div class="card-body p-4">
             <form method="POST" action="{{ url_for('token.Create_token') }}">
+                
                 <div class="mb-3">
                     <label for="career" class="form-label">Selecciona una Carrera</label>
                     <select name="career" id="career" class="form-select" required>
                         <option value="" disabled selected>-- Selecciona una carrera --</option>
                         {% for c in career_avaliable %}
-                            <option value="{{ c }}">{{ c }}</option>
+                            <option value="{{ c.Id_Car }}">{{ c.Nom_Car }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -24,13 +25,45 @@
                 <div class="mb-3">
                     <label for="token" class="form-label">Número de Ficha</label>
                     <input 
-                        type="text" 
+                        type="number" 
                         class="form-control" 
                         id="token" 
                         name="token"
                         placeholder="Ej: 3407200" 
                         required
                     >
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fec_inicio" class="form-label">Fecha de Inicio</label>
+                        <input 
+                            type="date" 
+                            class="form-control" 
+                            id="fec_inicio" 
+                            name="fec_inicio" 
+                            required
+                        >
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fec_fin" class="form-label">Fecha de Fin</label>
+                        <input 
+                            type="date" 
+                            class="form-control" 
+                            id="fec_fin" 
+                            name="fec_fin" 
+                            required
+                        >
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="jornada" class="form-label">Jornada</label>
+                    <select name="jornada" id="jornada" class="form-select" required>
+                        <option value="" disabled selected>-- Selecciona la jornada --</option>
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noche">Noche</option>
+                    </select>
                 </div>
 
                 {% if error %}
@@ -40,7 +73,7 @@
                 {% endif %}
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">Crear Token</button>
+                    <button type="submit" class="btn btn-success">Crear Ficha</button>
                     <a href="{{ url_for('token.module_token_config') }}" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
